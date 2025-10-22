@@ -12,6 +12,7 @@
   --color-primary: #060606;
   --add-btn-width: 8rem;
   --circumference: 339.292;
+  --h1-height: 7rem;
 }
 
 html {
@@ -22,9 +23,10 @@ body {
   box-sizing: border-box;
   min-height: 100dvh;
   min-width: 100dvw;
-  font-family: 'Montserrat';
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
   color: #060606;
   font-size: 1.2rem;
+  color: #ffffff;
 
   background: #1b3966;
   background: linear-gradient(
@@ -40,26 +42,45 @@ ul {
 }
 
 .container-app {
-  min-height: 100dvh;
+  // min-height: 100dvh;
+  min-height: calc(100vh - var(--h1-height));
   // background-color: rgba(255, 255, 255, 0.126);
   margin: 0 auto;
   max-width: 50rem;
-  padding: 1rem 2rem 2rem 2rem;
+  padding: 4rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 22px;
 }
 
-.title {
+.header {
   color: #ffffff;
   text-align: center;
+  height: var(--h1-height);
   background-color: rgba(255, 255, 255, 0.126);
   padding: 2rem;
-  margin-bottom: 2rem;
+  font-weight: 100;
+  box-shadow: 0.2rem 0.2rem 3rem rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+  font-weight: 200;
+}
+
+.logo-icon {
+  width: 4rem;
+  height: 4rem;
 }
 
 .heading {
   margin-bottom: 1rem;
+  font-weight: 300;
+  // text-transform: uppercase;
+  font-size: 2.2rem;
 }
 
 .add-form {
@@ -118,7 +139,7 @@ ul {
 .list-item {
   display: flex;
   align-items: center;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 
   font-weight: 400;
   padding: 1rem;

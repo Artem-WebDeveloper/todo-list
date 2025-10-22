@@ -5,7 +5,12 @@ import { nanoid } from 'nanoid';
 function App() {
   return (
     <>
-      <h1 className="title">Simple To Do App</h1>
+      <header className="header">
+        <h1 className="title">
+          <span>Simple To Do App </span>
+        </h1>
+        <LogoIcon />
+      </header>
       <Main />
     </>
   );
@@ -45,6 +50,7 @@ function Main() {
 
   return (
     <main className="container-app">
+      {/* <h1 className="title">Simple To Do App</h1> */}
       <Form onAddTask={AddTask} />
       <TaskList
         onTaskList={taskList}
@@ -251,6 +257,25 @@ function Stats({ onTaskList }) {
         </p>
       </div>
     </div>
+  );
+}
+
+function LogoIcon() {
+  return (
+    <svg
+      className="logo-icon"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none">
+      <rect width="24" height="24" />
+      <path
+        d="M5 13.3636L8.03559 16.3204C8.42388 16.6986 9.04279 16.6986 9.43108 16.3204L19 7"
+        stroke="#ffffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
