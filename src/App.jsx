@@ -1,14 +1,53 @@
+import { useState } from 'react';
+
+const tasks = [
+  {
+    task: 'Помыть посуду',
+    id: 1,
+    completed: false,
+  },
+  {
+    task: 'Погладить кота',
+    id: 2,
+    completed: true,
+  },
+  {
+    task: 'Пострирать вещи',
+    id: 3,
+    completed: true,
+  },
+];
+
 function App() {
   return (
     <>
       <h1 className="title">Simple To Do App</h1>
-      <div className="container">
-        <Form />
-        <TaskList />
-        <CompletedList />
-        <Stats />
-      </div>
+      <Main />
     </>
+  );
+}
+
+function Main() {
+  const [taskList, setTasksList] = useState(tasks);
+
+  function handleToggleTask(id) {
+    setTasksList(items =>
+      items.map(item =>
+        item.id === id ? { ...item, completed: !item.completed } : item
+      )
+    );
+  }
+
+  return (
+    <main className="container-app">
+      <Form />
+      <TaskList onTaskList={taskList} onHandleToggleTask={handleToggleTask} />
+      <CompletedList
+        onTaskList={taskList}
+        onHandleToggleTask={handleToggleTask}
+      />
+      <Stats />
+    </main>
   );
 }
 
@@ -28,35 +67,58 @@ function Form() {
   );
 }
 
-function TaskList() {
+function TaskList({ onTaskList, onHandleToggleTask }) {
   return (
     <section className="todo-section">
       <h2 className="heading">Список дел:</h2>
       <ul className="tasks-list">
-        <Item />
+        {onTaskList.map(task =>
+          !task.completed ? (
+            <Item
+              tasks={task}
+              key={task.id}
+              onHandleToggleTask={onHandleToggleTask}
+            />
+          ) : (
+            false
+          )
+        )}
       </ul>
     </section>
   );
 }
-function CompletedList() {
+function CompletedList({ onTaskList, onHandleToggleTask }) {
   return (
     <section className="completed-section">
       <h2 className="heading">Выполнено:</h2>
       <ul className="tasks-list">
-        <Item />
-        <Item />
-        <Item />
+        {onTaskList.map(task =>
+          task.completed ? (
+            <Item
+              tasks={task}
+              key={task.id}
+              onHandleToggleTask={onHandleToggleTask}
+            />
+          ) : (
+            false
+          )
+        )}
       </ul>
     </section>
   );
 }
 
-function Item() {
+function Item({ tasks, onHandleToggleTask }) {
   return (
     // <li className="list-item list-item--edit">
     <li className="list-item">
-      <input className="list-item__checkbox" type="checkbox" />
-      <span className="list-item__note">Помыть посуду</span>
+      <input
+        className="list-item__checkbox"
+        type="checkbox"
+        checked={tasks.completed}
+        onChange={() => onHandleToggleTask(tasks.id)}
+      />
+      <span className="list-item__note">{tasks.task}</span>
       <input className="list-item__input" type="text" />
       <button className="btn btn--edit">✒️</button>
       <button className="btn btn--delete">❌</button>
