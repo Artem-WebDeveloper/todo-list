@@ -40,10 +40,11 @@ ul {
 }
 
 .container-app {
+  min-height: 100dvh;
   // background-color: rgba(255, 255, 255, 0.126);
   margin: 0 auto;
   max-width: 50rem;
-  padding: 1rem 2rem;
+  padding: 1rem 2rem 2rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -155,7 +156,8 @@ ul {
   }
 
   &__input {
-    width: 0;
+    // width: 0;
+    display: none;
     border: none;
     font-size: inherit;
     transition: width 0.3s;
@@ -169,6 +171,7 @@ ul {
   &--edit {
     .list-item__input {
       width: 100%;
+      display: inline-block;
       margin-right: 1rem;
       padding: 0.3rem;
       padding-left: 0.8rem;
@@ -195,9 +198,11 @@ ul {
 }
 
 .stats {
+  margin-top: auto;
   display: flex;
   justify-content: space-evenly;
   // gap: 0.4rem;
+  font-size: 1.6rem;
   &__info {
     font-weight: 300;
     font-size: 1.3rem;
@@ -240,4 +245,8 @@ ul {
     dominant-baseline: middle;
     transform: rotate(90, 60, 60);
   }
+}
+
+.text-center {
+  text-align: center;
 }

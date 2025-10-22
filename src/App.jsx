@@ -1,22 +1,6 @@
 import { useState } from 'react';
-
-const tasks = [
-  {
-    task: 'Помыть посуду',
-    id: 1,
-    completed: false,
-  },
-  {
-    task: 'Погладить кота',
-    id: 2,
-    completed: true,
-  },
-  {
-    task: 'Пострирать вещи',
-    id: 3,
-    completed: true,
-  },
-];
+import { useEffect } from 'react';
+import { nanoid } from 'nanoid';
 
 function App() {
   return (
@@ -28,7 +12,18 @@ function App() {
 }
 
 function Main() {
-  const [taskList, setTasksList] = useState(tasks);
+  const [taskList, setTasksList] = useState(() => {
+    const savedTasks = localStorage.getItem('tasks');
+    return savedTasks ? JSON.parse(savedTasks) : tasks;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(taskList));
+  }, [taskList]);
+
+  function AddTask(item) {
+    setTasksList(items => [...items, item]);
+  }
 
   function handleToggleTask(id) {
     setTasksList(items =>
@@ -38,28 +33,62 @@ function Main() {
     );
   }
 
+  function handleDeleteTask(id) {
+    setTasksList(items => items.filter(item => item.id !== id));
+  }
+
+  function handleEditTask(id, newTask) {
+    setTasksList(items =>
+      items.map(item => (item.id === id ? { ...item, task: newTask } : item))
+    );
+  }
+
   return (
     <main className="container-app">
-      <Form />
-      <TaskList onTaskList={taskList} onHandleToggleTask={handleToggleTask} />
+      <Form onAddTask={AddTask} />
+      <TaskList
+        onTaskList={taskList}
+        onHandleToggleTask={handleToggleTask}
+        onHandleDeleteTask={handleDeleteTask}
+        onHandleEditTask={handleEditTask}
+      />
       <CompletedList
         onTaskList={taskList}
         onHandleToggleTask={handleToggleTask}
+        onHandleDeleteTask={handleDeleteTask}
+        onHandleEditTask={handleEditTask}
       />
-      <Stats />
+      <Stats onTaskList={taskList} />
     </main>
   );
 }
 
-function Form() {
+function Form({ onAddTask }) {
+  const [descrip, setDescrip] = useState('');
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!descrip) return;
+
+    const newTask = {
+      task: descrip.trim(),
+      id: nanoid(),
+      completed: false,
+    };
+    onAddTask(newTask);
+    setDescrip('');
+  }
+
   return (
-    <form className="add-form">
+    <form className="add-form" onSubmit={handleSubmit}>
       <h2 className="heading">Добавить задачу:</h2>
       <div className="add-form__add-box">
         <input
           className="add-form__input"
           type="text"
           placeholder="Что будете делать?"
+          value={descrip}
+          onChange={e => setDescrip(e.target.value)}
         />
         <button className="btn add-form__btn">Добавить</button>
       </div>
@@ -67,51 +96,91 @@ function Form() {
   );
 }
 
-function TaskList({ onTaskList, onHandleToggleTask }) {
+function TaskList({
+  onTaskList,
+  onHandleToggleTask,
+  onHandleDeleteTask,
+  onHandleEditTask,
+}) {
+  const NumUnComplete = onTaskList.filter(item => !item.completed).length;
+
+  if (NumUnComplete === 0 && onTaskList.length !== 0)
+    return (
+      <section className="todo-section">
+        <h2 className="heading text-center">Все дела завершены! 🚀</h2>
+      </section>
+    );
+
   return (
-    <section className="todo-section">
-      <h2 className="heading">Список дел:</h2>
-      <ul className="tasks-list">
-        {onTaskList.map(task =>
-          !task.completed ? (
-            <Item
-              tasks={task}
-              key={task.id}
-              onHandleToggleTask={onHandleToggleTask}
-            />
-          ) : (
-            false
-          )
-        )}
-      </ul>
-    </section>
+    !!NumUnComplete && (
+      <section className="todo-section">
+        <h2 className="heading">Список дел:</h2>
+        <ul className="tasks-list">
+          {onTaskList.map(task =>
+            !task.completed ? (
+              <Item
+                tasks={task}
+                key={task.id}
+                onHandleToggleTask={onHandleToggleTask}
+                onHandleDeleteTask={onHandleDeleteTask}
+                onHandleEditTask={onHandleEditTask}
+              />
+            ) : (
+              false
+            )
+          )}
+        </ul>
+      </section>
+    )
   );
 }
-function CompletedList({ onTaskList, onHandleToggleTask }) {
+function CompletedList({
+  onTaskList,
+  onHandleToggleTask,
+  onHandleDeleteTask,
+  onHandleEditTask,
+}) {
+  const numComplete = onTaskList.filter(item => item.completed).length;
+
   return (
-    <section className="completed-section">
-      <h2 className="heading">Выполнено:</h2>
-      <ul className="tasks-list">
-        {onTaskList.map(task =>
-          task.completed ? (
-            <Item
-              tasks={task}
-              key={task.id}
-              onHandleToggleTask={onHandleToggleTask}
-            />
-          ) : (
-            false
-          )
-        )}
-      </ul>
-    </section>
+    !!numComplete && (
+      <section className="completed-section">
+        <h2 className="heading">Выполнено:</h2>
+        <ul className="tasks-list">
+          {onTaskList.map(task =>
+            task.completed ? (
+              <Item
+                tasks={task}
+                key={task.id}
+                onHandleToggleTask={onHandleToggleTask}
+                onHandleDeleteTask={onHandleDeleteTask}
+                onHandleEditTask={onHandleEditTask}
+              />
+            ) : (
+              false
+            )
+          )}
+        </ul>
+      </section>
+    )
   );
 }
 
-function Item({ tasks, onHandleToggleTask }) {
+function Item({
+  tasks,
+  onHandleToggleTask,
+  onHandleDeleteTask,
+  onHandleEditTask,
+}) {
+  const [newTask, setnewTask] = useState(tasks.task);
+  const [editMode, setEditMode] = useState(false);
+
+  function handleToggleEditMode() {
+    setEditMode(is => !is);
+  }
+
   return (
-    // <li className="list-item list-item--edit">
-    <li className="list-item">
+    <li className={`list-item ${editMode ? 'list-item--edit' : ''}`}>
       <input
         className="list-item__checkbox"
         type="checkbox"
@@ -119,34 +188,66 @@ function Item({ tasks, onHandleToggleTask }) {
         onChange={() => onHandleToggleTask(tasks.id)}
       />
       <span className="list-item__note">{tasks.task}</span>
-      <input className="list-item__input" type="text" />
-      <button className="btn btn--edit">✒️</button>
-      <button className="btn btn--delete">❌</button>
+      <input
+        className="list-item__input"
+        type="text"
+        value={newTask}
+        onChange={e => setnewTask(e.target.value)}
+      />
+      <button
+        className="btn btn--edit"
+        onClick={() => {
+          handleToggleEditMode();
+          editMode ? onHandleEditTask(tasks.id, newTask) : false;
+        }}>
+        ✒️
+      </button>
+      <button
+        className="btn btn--delete"
+        onClick={() => onHandleDeleteTask(tasks.id)}>
+        ❌
+      </button>
     </li>
   );
 }
 
-function Stats() {
-  return (
+function Stats({ onTaskList }) {
+  const numAll = onTaskList.length;
+  const numComplete = onTaskList.filter(item => item.completed).length;
+  const NumUnComplete = onTaskList.filter(item => !item.completed).length;
+  const percentage = Math.round((numComplete / numAll) * 100);
+
+  return numAll === 0 ? (
+    <div className="stats">Нет задач</div>
+  ) : (
     <div className="stats">
       <svg class="progress-ring" width="120" height="120">
         <circle className="progress-ring__bg" cx="60" cy="60" r="54" />
-        <circle className="progress-ring__value" cx="60" cy="60" r="54" />
+        <circle
+          className="progress-ring__value"
+          cx="60"
+          cy="60"
+          r="54"
+          style={{
+            strokeDashoffset: `calc(
+      var(--circumference) - (var(--circumference) * ${percentage / 100})`,
+          }}
+        />
         <text
           className="progress-ring__text"
           class="progress-ring__text"
           x="50%"
           y="50%"
           transform="rotate(90, 60, 60)">
-          65%
+          {percentage}%
         </text>
       </svg>
       <div className="stats__info">
         <p>
-          Дел запланировано: <span>2</span>
+          Дел запланировано: <span>{NumUnComplete}</span>
         </p>
         <p>
-          Дел Завершено: <span>1</span>
+          Дел Завершено: <span>{numComplete}</span>
         </p>
       </div>
     </div>
