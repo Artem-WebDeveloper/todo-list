@@ -43,7 +43,7 @@ ul {
 
 .container-app {
   // min-height: 100dvh;
-  min-height: calc(100vh - var(--h1-height));
+  min-height: calc(100dvh - var(--h1-height));
   // background-color: rgba(255, 255, 255, 0.126);
   margin: 0 auto;
   max-width: 50rem;
