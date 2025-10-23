@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { nanoid } from 'nanoid';
+import { Pencil, Trash2, CircleCheckBig } from 'lucide-react';
 
 function App() {
   return (
@@ -50,7 +51,6 @@ function Main() {
 
   return (
     <main className="container-app">
-      {/* <h1 className="title">Simple To Do App</h1> */}
       <Form onAddTask={AddTask} />
       <TaskList
         onTaskList={taskList}
@@ -96,7 +96,9 @@ function Form({ onAddTask }) {
           value={descrip}
           onChange={e => setDescrip(e.target.value)}
         />
-        <button className="btn add-form__btn">Добавить</button>
+        <button className="add-form__btn">
+          <PlusIcon />
+        </button>
       </div>
     </form>
   );
@@ -113,7 +115,9 @@ function TaskList({
   if (NumUnComplete === 0 && onTaskList.length !== 0)
     return (
       <section className="todo-section">
-        <h2 className="heading text-center">Все дела завершены! 🚀</h2>
+        <h2 className="heading text-center">
+          Все дела завершены! <CircleCheckBig color={'#51ce55'} />
+        </h2>
       </section>
     );
 
@@ -206,12 +210,12 @@ function Item({
           handleToggleEditMode();
           editMode ? onHandleEditTask(tasks.id, newTask) : false;
         }}>
-        ✒️
+        <Pencil size={20} />
       </button>
       <button
         className="btn btn--delete"
         onClick={() => onHandleDeleteTask(tasks.id)}>
-        ❌
+        <Trash2 size={20} />
       </button>
     </li>
   );
@@ -250,7 +254,7 @@ function Stats({ onTaskList }) {
       </svg>
       <div className="stats__info">
         <p>
-          Дел запланировано: <span>{NumUnComplete}</span>
+          Дел Запланировано: <span>{NumUnComplete}</span>
         </p>
         <p>
           Дел Завершено: <span>{numComplete}</span>
@@ -274,6 +278,19 @@ function LogoIcon() {
         stroke="#ffffffff"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg className="plus-icon" viewBox="0 0 24 24" fill="#8d5cc1ff">
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M13 4C13 3.44772 12.5523 3 12 3C11.4477 3 11 3.44772 11 4V11H4C3.44772 11 3 11.4477 3 12C3 12.5523 3.44772 13 4 13H11V20C11 20.5523 11.4477 21 12 21C12.5523 21 13 20.5523 13 20V13H20C20.5523 13 21 12.5523 21 12C21 11.4477 20.5523 11 20 11H13V4Z"
+        fill="#8d5cc1ff"
       />
     </svg>
   );
