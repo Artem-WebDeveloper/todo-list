@@ -117,7 +117,8 @@ ul {
 
   backdrop-filter: blur(12px) saturate(110%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.27),
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.27),
     inset 0.1px 0.7px 0 rgba(255, 255, 255, 0.6);
 
   &__add-box {
@@ -297,7 +298,8 @@ ul {
   backdrop-filter: blur(10px);
   padding: 1.8rem 0.2rem;
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.27),
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.27),
     inset 0.1px 0.7px 1.5px rgba(255, 255, 255, 0.6);
   &__info {
     font-weight: 300;
