@@ -1,6 +1,5 @@
-import Main from './components/Main/Main';
+import Main from './components/Main';
 import Header from './components/Header/Header';
-import LogoIcon from './assets/svg/LogoIcon';
 
 function App() {
   return (

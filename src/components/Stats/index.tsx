@@ -1,7 +1,9 @@
-export default function Stats({ onTaskList }) {
-  const numAll = onTaskList.length;
-  const numComplete = onTaskList.filter(item => item.completed).length;
-  const NumUnComplete = onTaskList.filter(item => !item.completed).length;
+import type { TaskType } from '../../types';
+
+export default function Stats({ tasks }: { tasks: TaskType[] }) {
+  const numAll = tasks.length;
+  const numComplete = tasks.filter(item => item.completed).length;
+  const NumUnComplete = tasks.filter(item => !item.completed).length;
   const percentage = Math.round((numComplete / numAll) * 100);
 
   return numAll === 0 ? (
