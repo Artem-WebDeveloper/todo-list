@@ -39,7 +39,6 @@ export default defineConfig([
       parser: tsParser,
       globals: globals.browser,
       parserOptions: {
-        project: './tsconfig.app.json',
         sourceType: 'module',
       },
     },
