@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import { Pencil, Trash2, CircleCheckBig } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
+import type { TasksItemProps } from '../../types';
 
 export default function TasksItem({
-  tasks,
+  task,
   onHandleToggleTask,
   onHandleDeleteTask,
   onHandleEditTask,
-}) {
-  const [newTask, setnewTask] = useState(tasks.task);
+}: TasksItemProps) {
+  const [taskValue, setTaskValue] = useState<string>(task.task);
   const [editMode, setEditMode] = useState(false);
 
   function handleToggleEditMode() {
     setEditMode(is => !is);
+    if (editMode && taskValue !== task.task) {
+      onHandleEditTask(task.id, taskValue);
+    }
   }
 
   return (
@@ -19,25 +23,20 @@ export default function TasksItem({
       <input
         className="list-item__checkbox"
         type="checkbox"
-        checked={tasks.completed}
-        onChange={() => onHandleToggleTask(tasks.id)}
+        checked={task.completed}
+        onChange={() => onHandleToggleTask(task.id)}
       />
-      <span className="list-item__note">{tasks.task}</span>
+      <span className="list-item__note">{task.task}</span>
       <input
         className="list-item__input"
         type="text"
-        value={newTask}
-        onChange={e => setnewTask(e.target.value)}
+        value={taskValue}
+        onChange={e => setTaskValue(e.target.value)}
       />
-      <button
-        className="btn btn--edit"
-        onClick={() => {
-          handleToggleEditMode();
-          editMode ? onHandleEditTask(tasks.id, newTask) : false;
-        }}>
+      <button className="btn btn--edit" onClick={handleToggleEditMode}>
         <Pencil size={20} />
       </button>
-      <button className="btn btn--delete" onClick={() => onHandleDeleteTask(tasks.id)}>
+      <button className="btn btn--delete" onClick={() => onHandleDeleteTask(task.id)}>
         <Trash2 size={20} />
       </button>
     </li>

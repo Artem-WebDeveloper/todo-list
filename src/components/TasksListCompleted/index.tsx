@@ -15,7 +15,7 @@ export default function TasksListCompleted({
       <ul className="tasks-list">
         {tasks.map(task => (
           <TasksItem
-            tasks={task}
+            task={task}
             key={task.id}
             onHandleToggleTask={onHandleToggleTask}
             onHandleDeleteTask={onHandleDeleteTask}
