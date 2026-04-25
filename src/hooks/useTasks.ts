@@ -7,28 +7,28 @@ function getInitialTasks() {
 }
 
 function useTasks() {
-  const [tasks, setTasksList] = useState<TaskType[]>(getInitialTasks);
+  const [tasks, setTasks] = useState<TaskType[]>(getInitialTasks);
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
   function addTask(item: TaskType) {
-    setTasksList(items => [...items, item]);
+    setTasks(items => [...items, item]);
   }
 
   function handleToggleTask(id: string) {
-    setTasksList(items =>
+    setTasks(items =>
       items.map(item => (item.id === id ? { ...item, completed: !item.completed } : item)),
     );
   }
 
   function handleDeleteTask(id: string) {
-    setTasksList(items => items.filter(item => item.id !== id));
+    setTasks(items => items.filter(item => item.id !== id));
   }
 
   function handleEditTask(id: string, newTask: string) {
-    setTasksList(items => items.map(item => (item.id === id ? { ...item, task: newTask } : item)));
+    setTasks(items => items.map(item => (item.id === id ? { ...item, task: newTask } : item)));
   }
 
   return { tasks, addTask, handleToggleTask, handleDeleteTask, handleEditTask };
