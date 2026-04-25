@@ -1,12 +1,18 @@
-import type { TaskType } from '../../types';
+import { useAppSelector } from '../../store/store';
+import {
+  selectCountActiveTasks,
+  selectCountCompletedTasks,
+  selectPercentage,
+  selectTotalTasksCount,
+} from '../../store/tasks.selectors';
 
-export default function Stats({ tasks }: { tasks: TaskType[] }) {
-  const numAll = tasks.length;
-  const numComplete = tasks.filter(item => item.completed).length;
-  const NumUnComplete = tasks.filter(item => !item.completed).length;
-  const percentage = Math.round((numComplete / numAll) * 100);
+export default function Stats() {
+  const totalCount = useAppSelector(selectTotalTasksCount);
+  const activeCount = useAppSelector(selectCountActiveTasks);
+  const completedCount = useAppSelector(selectCountCompletedTasks);
+  const percentage = useAppSelector(selectPercentage);
 
-  return numAll === 0 ? (
+  return totalCount === 0 ? (
     <div className="stats">Нет задач</div>
   ) : (
     <div className="stats">
@@ -28,10 +34,10 @@ export default function Stats({ tasks }: { tasks: TaskType[] }) {
       </svg>
       <div className="stats__info">
         <p>
-          Дел Запланировано: <span>{NumUnComplete}</span>
+          Дел Запланировано: <span>{activeCount}</span>
         </p>
         <p>
-          Дел Завершено: <span>{numComplete}</span>
+          Дел Завершено: <span>{completedCount}</span>
         </p>
       </div>
     </div>

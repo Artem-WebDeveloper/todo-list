@@ -1,12 +1,10 @@
-import type { TasksListProps } from '../../types';
+import { useAppSelector } from '../../store/store';
+import { selectCompletedTasks } from '../../store/tasks.selectors';
 import TasksItem from '../TasksItem';
 
-export default function TasksListCompleted({
-  tasks,
-  onHandleToggleTask,
-  onHandleDeleteTask,
-  onHandleEditTask,
-}: TasksListProps) {
+export default function TasksListCompleted() {
+  const tasks = useAppSelector(selectCompletedTasks);
+
   if (!tasks.length) return null;
 
   return (
@@ -14,13 +12,7 @@ export default function TasksListCompleted({
       <h2 className="heading">Выполнено:</h2>
       <ul className="tasks-list">
         {tasks.map(task => (
-          <TasksItem
-            task={task}
-            key={task.id}
-            onHandleToggleTask={onHandleToggleTask}
-            onHandleDeleteTask={onHandleDeleteTask}
-            onHandleEditTask={onHandleEditTask}
-          />
+          <TasksItem task={task} key={task.id} />
         ))}
       </ul>
     </section>
