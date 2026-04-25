@@ -83,8 +83,22 @@ function TasksProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'tasks/toggle', payload: id });
   }
 
+  const activeTasks = tasks.filter(task => !task.completed);
+  const completedTasks = tasks.filter(task => task.completed);
+  const totalTasksCount = tasks.length;
+
   return (
-    <TasksContext.Provider value={{ tasks, addTask, deleteTask, editTask, toggleCompletedTask }}>
+    <TasksContext.Provider
+      value={{
+        tasks,
+        activeTasks,
+        completedTasks,
+        totalTasksCount,
+        addTask,
+        deleteTask,
+        editTask,
+        toggleCompletedTask,
+      }}>
       {children}
     </TasksContext.Provider>
   );

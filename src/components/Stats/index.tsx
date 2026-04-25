@@ -1,10 +1,12 @@
-import type { TaskType } from '../../types';
+import useTasks from '../../contexts/tasksContext/useTasks';
 
-export default function Stats({ tasks }: { tasks: TaskType[] }) {
+export default function Stats() {
+  const { tasks, completedTasks, activeTasks } = useTasks();
+
   const numAll = tasks.length;
-  const numComplete = tasks.filter(item => item.completed).length;
-  const NumUnComplete = tasks.filter(item => !item.completed).length;
-  const percentage = Math.round((numComplete / numAll) * 100);
+  const numCompletedTasks = completedTasks.length;
+  const NumActiveTasks = activeTasks.length;
+  const percentage = Math.round((numCompletedTasks / numAll) * 100);
 
   return numAll === 0 ? (
     <div className="stats">Нет задач</div>
@@ -28,10 +30,10 @@ export default function Stats({ tasks }: { tasks: TaskType[] }) {
       </svg>
       <div className="stats__info">
         <p>
-          Дел Запланировано: <span>{NumUnComplete}</span>
+          Дел Запланировано: <span>{NumActiveTasks}</span>
         </p>
         <p>
-          Дел Завершено: <span>{numComplete}</span>
+          Дел Завершено: <span>{numCompletedTasks}</span>
         </p>
       </div>
     </div>

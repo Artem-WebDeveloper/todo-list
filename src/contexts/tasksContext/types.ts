@@ -2,6 +2,9 @@ import type { TaskType } from '../../types';
 
 export type ContextTasksType = {
   tasks: TaskType[];
+  activeTasks: TaskType[];
+  completedTasks: TaskType[];
+  totalTasksCount: number;
   addTask: (newTask: TaskType) => void;
   deleteTask: (id: string) => void;
   editTask: (id: string, newTask: string) => void;

@@ -1,18 +1,14 @@
 import { CircleCheckBig } from 'lucide-react';
-import type { TasksListCompletedProps } from '../../types';
 
 import TasksItem from '../TasksItem';
+import useTasks from '../../contexts/tasksContext/useTasks';
 
 const COLOR_SUCCESS = '#51ce55';
 
-export default function TasksList({
-  tasks,
-  onHandleToggleTask,
-  onHandleDeleteTask,
-  onHandleEditTask,
-  totalTasksCount,
-}: TasksListCompletedProps) {
-  if (tasks.length === 0 && totalTasksCount !== 0)
+export default function TasksList() {
+  const { activeTasks, totalTasksCount } = useTasks();
+
+  if (activeTasks.length === 0 && totalTasksCount !== 0)
     return (
       <section className="todo-section">
         <h2 className="heading text-center">
@@ -21,20 +17,14 @@ export default function TasksList({
       </section>
     );
 
-  if (tasks.length === 0) return null;
+  if (activeTasks.length === 0) return null;
 
   return (
     <section className="todo-section">
       <h2 className="heading">Список дел:</h2>
       <ul className="tasks-list">
-        {tasks.map(task => (
-          <TasksItem
-            task={task}
-            key={task.id}
-            onHandleToggleTask={onHandleToggleTask}
-            onHandleDeleteTask={onHandleDeleteTask}
-            onHandleEditTask={onHandleEditTask}
-          />
+        {activeTasks.map(task => (
+          <TasksItem task={task} key={task.id} />
         ))}
       </ul>
     </section>

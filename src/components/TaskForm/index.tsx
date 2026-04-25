@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { nanoid } from 'nanoid';
 
 import PlusIcon from '../../assets/svg/PlusIcon';
-import type { TaskType } from '../../types';
+import useTasks from '../../contexts/tasksContext/useTasks';
 
-export default function TaskForm({ onAddTask }: { onAddTask: (newTask: TaskType) => void }) {
+export default function TaskForm() {
+  const { addTask } = useTasks();
+
   const [descrip, setDescrip] = useState('');
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
@@ -16,7 +18,7 @@ export default function TaskForm({ onAddTask }: { onAddTask: (newTask: TaskType)
       id: nanoid(),
       completed: false,
     };
-    onAddTask(newTask);
+    addTask(newTask);
     setDescrip('');
   }
 
