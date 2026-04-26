@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import type { TaskType } from '../../types';
-import { useDispatch } from 'react-redux';
 import { edit, remove, toggleCompleted } from '../../store/tasks.slice';
+import { useAppDispatch } from '../../store/store';
 
 export default function TasksItem({ task }: { task: TaskType }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [taskValue, setTaskValue] = useState<string>(task.task);
   const [editMode, setEditMode] = useState(false);
