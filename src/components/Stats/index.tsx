@@ -1,13 +1,16 @@
+import {
+  selectActiveTasksCount,
+  selectCompletedTasksCount,
+  selectPercentage,
+  selectTotalTasksCount,
+} from '../../store/tasks.selectors';
 import { useTasksStore } from '../../store/tasks.store';
 
 export default function Stats() {
-  const tasks = useTasksStore(state => state.tasks);
-
-  const activeTaksCount = tasks.filter(task => !task.completed).length;
-  const completedTaksCount = tasks.filter(task => task.completed).length;
-  const totalCountTasks = tasks.length;
-  const percentage =
-    totalCountTasks === 0 ? 0 : Math.round((completedTaksCount / totalCountTasks) * 100);
+  const activeTaksCount = useTasksStore(selectActiveTasksCount);
+  const completedTaksCount = useTasksStore(selectCompletedTasksCount);
+  const totalCountTasks = useTasksStore(selectTotalTasksCount);
+  const percentage = useTasksStore(selectPercentage);
 
   return totalCountTasks === 0 ? (
     <div className="stats">Нет задач</div>

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { TaskType } from '../types';
 import { persist } from 'zustand/middleware';
 
-interface TasksState {
+export interface TasksState {
   tasks: TaskType[];
   add: (task: TaskType) => void;
   remove: (id: string) => void;

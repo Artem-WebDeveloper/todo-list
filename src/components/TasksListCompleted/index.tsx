@@ -1,10 +1,10 @@
+import { selectCompletedTasks } from '../../store/tasks.selectors';
 import { useTasksStore } from '../../store/tasks.store';
 
 import TasksItem from '../TasksItem';
 
 export default function TasksListCompleted() {
-  const tasks = useTasksStore(state => state.tasks);
-  const completedTasks = tasks.filter(task => task.completed);
+  const tasks = useTasksStore(selectCompletedTasks);
 
   if (!tasks.length) return null;
 
@@ -12,7 +12,7 @@ export default function TasksListCompleted() {
     <section className="completed-section">
       <h2 className="heading">Выполнено:</h2>
       <ul className="tasks-list">
-        {completedTasks.map(task => (
+        {tasks.map(task => (
           <TasksItem task={task} key={task.id} />
         ))}
       </ul>
