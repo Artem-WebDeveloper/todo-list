@@ -1,10 +1,18 @@
-export default function Stats({ onTaskList }) {
-  const numAll = onTaskList.length;
-  const numComplete = onTaskList.filter(item => item.completed).length;
-  const NumUnComplete = onTaskList.filter(item => !item.completed).length;
-  const percentage = Math.round((numComplete / numAll) * 100);
+import {
+  selectActiveTasksCount,
+  selectCompletedTasksCount,
+  selectPercentage,
+  selectTotalTasksCount,
+} from '../../store/tasks.selectors';
+import { useTasksStore } from '../../store/tasks.store';
 
-  return numAll === 0 ? (
+export default function Stats() {
+  const activeTaksCount = useTasksStore(selectActiveTasksCount);
+  const completedTaksCount = useTasksStore(selectCompletedTasksCount);
+  const totalCountTasks = useTasksStore(selectTotalTasksCount);
+  const percentage = useTasksStore(selectPercentage);
+
+  return totalCountTasks === 0 ? (
     <div className="stats">Нет задач</div>
   ) : (
     <div className="stats">
@@ -26,10 +34,10 @@ export default function Stats({ onTaskList }) {
       </svg>
       <div className="stats__info">
         <p>
-          Дел Запланировано: <span>{NumUnComplete}</span>
+          Дел Запланировано: <span>{activeTaksCount}</span>
         </p>
         <p>
-          Дел Завершено: <span>{numComplete}</span>
+          Дел Завершено: <span>{completedTaksCount}</span>
         </p>
       </div>
     </div>

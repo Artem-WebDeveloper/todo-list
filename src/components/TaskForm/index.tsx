@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
 
-import PlusIcon from '../../../assets/svg/PlusIcon';
+import PlusIcon from '../../assets/svg/PlusIcon';
+import { useTasksStore } from '../../store/tasks.store';
 
-export default function Form({ onAddTask }) {
+export default function TaskForm() {
   const [descrip, setDescrip] = useState('');
 
-  function handleSubmit(e) {
+  const addTask = useTasksStore(state => state.add);
+
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!descrip) return;
 
@@ -15,7 +18,8 @@ export default function Form({ onAddTask }) {
       id: nanoid(),
       completed: false,
     };
-    onAddTask(newTask);
+
+    addTask(newTask);
     setDescrip('');
   }
 
